@@ -1,0 +1,11 @@
+#!/usr/bin/env bash
+declare -A get
+for i in $(tr "&" " " <<< "$1"); do
+	read -r key value <<< "$(tr "=" " " <<< "$i")"
+	get[$key]="$value"
+done
+echo "Good morning, ${get[name]}! Here are your headers:"
+shift
+for i in "$@"; do
+	echo -n "> $i"
+done

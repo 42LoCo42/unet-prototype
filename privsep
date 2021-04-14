@@ -1,0 +1,17 @@
+#!/usr/bin/env bash
+if grep -q ":" <<< "$1"; then
+	read -r user group <<< "$(tr ":" " " <<< "$1")"
+	shift
+else
+	user="$1"
+	group="$2"
+	shift 2
+fi
+
+id
+for i in /dev/std*; do
+	chmod a+w "$i"
+	stat -L "$i"
+	readlink -f "$i"
+done
+exec runuser -u "$user" -g "$group" "$@"

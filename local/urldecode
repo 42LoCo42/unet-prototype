@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
 urldecode() {
 	: "${*//+/ }"
-	echo -e "${_//%/\\x}";
+	echo -e "${_//%/\\x}"
 }

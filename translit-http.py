@@ -1,6 +1,7 @@
 import sys
 import unet_request
 import fileserver
+import subprocess
 
 def bstrip(line):
     # empty line
@@ -70,6 +71,17 @@ if __name__ == "__main__":
             if NUM >= 400:
                 content = f"{NUM} - {response.fields[0]}: {response.fields[1]}\n"
 
+            print(content, file = sys.stderr)
             length = len(content)
-            print(f"HTTP/2 {NUM}\r\nContent-Length: {length}\r\n\r\n{content}", end = "")
+            p = subprocess.run(
+                ["file", "-b", "--mime-type", "-"],
+                input = content.encode("utf-8"),
+                capture_output = True
+            )
+            print(f"""\
+HTTP/2 {NUM}\r\n\
+Content-Length: {length}\r\n\
+Content-Type: {p.stdout[0:-1].decode('utf-8')}; charset=utf-8\r\n\
+\r\n\
+{content}""", end = "")
             break

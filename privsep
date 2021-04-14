@@ -8,10 +8,7 @@ else
 	shift 2
 fi
 
-id
 for i in /dev/std*; do
 	chmod a+w "$i"
-	stat -L "$i"
-	readlink -f "$i"
 done
 exec runuser -u "$user" -g "$group" "$@"
